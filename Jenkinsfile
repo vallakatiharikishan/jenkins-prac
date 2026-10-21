@@ -4,6 +4,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'tasktrack'
+        NETLIFY_SITE_ID = credentials('463e5169-59d9-4bf3-b6c4-73468afddc34')
     }
 
     stages {
@@ -24,6 +25,7 @@ pipeline {
             steps {
                 bat '''
                     call npx --yes netlify-cli --version
+                    echo "Deploying to production. Site ID: %NETLIFY_SITE_ID%"
                 '''
             }
         }
