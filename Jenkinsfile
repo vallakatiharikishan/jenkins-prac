@@ -65,7 +65,7 @@
                 }
             }
 
-            stage('Verifyy Build Artifact') {
+            stage('Verify Build Artifact') {
                 steps {
                     bat '''
                         if not exist dist\\index.html (
