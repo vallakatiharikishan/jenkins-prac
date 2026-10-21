@@ -28,6 +28,7 @@ pipeline {
                     call npx --yes netlify-cli --version
                     echo "Deploying to production. Site ID: %NETLIFY_SITE_ID%"
                     call npx netlify-cli status
+                    call npx netlify-cli deploy --dir=build --prod
                 '''
             }
         }
