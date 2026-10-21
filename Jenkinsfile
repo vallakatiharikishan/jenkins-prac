@@ -20,11 +20,12 @@ pipeline {
             }
         }        
         stage('Deploy') {
-            steps 
+            steps {
                 bat 'npm install netlify-cli -g'
-                bat  'netlify --version'
+                bat 'netlify --version'
             }
         }
+
     }
 
     post {
