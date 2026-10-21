@@ -3,45 +3,81 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'tasktrack'
         NETLIFY_SITE_ID = '463e5169-59d9-4bf3-b6c4-73468afddc34'
         NETLIFY_AUTH_TOKEN = credentials('netlify-token')
+        CI = 'true'
+    }
+
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+        timeout(time: 20, unit: 'MINUTES')
     }
 
     stages {
-        stage('Build Docker Image') {
+        stage('Checkout') {
             steps {
-                bat 'docker version'
-                bat 'docker build -t %IMAGE_NAME%:%BUILD_NUMBER% .'
+                checkout scm
             }
         }
 
-        stage('Verify Docker Image') {
-            steps {
-                bat 'docker run --rm --entrypoint sh %IMAGE_NAME%:%BUILD_NUMBER% -c "test -s /usr/share/nginx/html/index.html"'
-            }
-        }        
-      
-        stage('Deploy') {
+        stage('Install Dependencies') {
             steps {
                 bat '''
-                    call npx --yes netlify-cli --version
-                    echo "Deploying to production. Site ID: %NETLIFY_SITE_ID%"
-                    call npx netlify-cli status
-                    call npx --yes netlify-cli deploy --dir=dist --prod --site=%NETLIFY_SITE_ID% --no-build
+                    node --version
+                    npm --version
+                    call npm ci
                 '''
             }
         }
 
+        stage('Code Quality') {
+            steps {
+                bat 'call npm run lint'
+            }
+        }
 
+        stage('Build') {
+            steps {
+                bat 'call npm run build'
+            }
+        }
+
+        stage('Verify Build Artifact') {
+            steps {
+                bat '''
+                    if not exist dist\\index.html (
+                        echo ERROR: dist\\index.html not found
+                        exit /b 1
+                    )
+
+                    dir dist
+                    echo Frontend build verification successful
+                '''
+            }
+        }
+
+        stage('Deploy to Netlify') {
+            steps {
+                bat '''
+                    call npx --yes netlify-cli deploy --dir=dist --prod --site=%NETLIFY_SITE_ID% --no-build
+                '''
+            }
+        }
     }
 
     post {
         success {
-            echo 'Docker image built and verified successfully!'
+            echo 'CI/CD pipeline completed successfully.'
+            echo 'Frontend deployed to Netlify.'
         }
+
         failure {
-            echo 'Pipeline failed. Check Console Output.'
+            echo 'Pipeline failed. Check the stage logs.'
+        }
+
+        always {
+            echo 'Jenkins pipeline execution finished.'
         }
     }
 }
