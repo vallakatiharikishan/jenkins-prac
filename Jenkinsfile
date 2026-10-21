@@ -18,6 +18,12 @@ pipeline {
             steps {
                 bat 'docker run --rm --entrypoint sh %IMAGE_NAME%:%BUILD_NUMBER% -c "test -s /usr/share/nginx/html/index.html"'
             }
+        }        
+        stage('Deploy') {
+            steps 
+                bat 'npm install netlify-cli -g'
+                bat  'netlify --version'
+            }
         }
     }
 
