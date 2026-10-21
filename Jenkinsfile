@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -6,22 +7,26 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+        stage('Build Docker Image') {
             steps {
-                checkout scm
+                bat 'docker version'
+                bat 'docker build -t %IMAGE_NAME%:%BUILD_NUMBER% .'
             }
         }
 
-        stage('Build Docker image') {
+        stage('Verify Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME:$BUILD_NUMBER .'
+                bat 'docker run --rm --entrypoint sh %IMAGE_NAME%:%BUILD_NUMBER% -c "test -s /usr/share/nginx/html/index.html"'
             }
         }
+    }
 
-        stage('Verify Docker image') {
-            steps {
-                sh 'docker run --rm --entrypoint sh $IMAGE_NAME:$BUILD_NUMBER -c "test -s /usr/share/nginx/html/index.html"'
-            }
+    post {
+        success {
+            echo 'Docker image built and verified successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check Console Output.'
         }
     }
 }
