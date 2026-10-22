@@ -56,7 +56,7 @@ pipeline {
                 bat '''
                     docker run --rm ^
                       --mount "type=bind,source=%WORKSPACE%,target=/app" ^
-                      -w /app node:18 ^
+                      -w /app node:22 ^
                       npm run build
                 '''
             }
