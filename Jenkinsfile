@@ -34,7 +34,7 @@ pipeline {
                 bat '''
                     docker run --rm ^
                       --mount "type=bind,source=%WORKSPACE%,target=/app" ^
-                      -w /app node:18 ^
+                      -w /app node:22 ^
                       npm ci
                 '''
             }
@@ -45,7 +45,7 @@ pipeline {
                 bat '''
                     docker run --rm ^
                       --mount "type=bind,source=%WORKSPACE%,target=/app" ^
-                      -w /app node:18 ^
+                      -w /app node:22 ^
                       npm run lint
                 '''
             }
@@ -83,7 +83,7 @@ pipeline {
                       --mount "type=bind,source=%WORKSPACE%,target=/app" ^
                       -e NETLIFY_SITE_ID ^
                       -e NETLIFY_AUTH_TOKEN ^
-                      -w /app node:18 ^
+                      -w /app node:22 ^
                       npx --yes netlify-cli deploy --dir=dist --prod --site=%NETLIFY_SITE_ID% --no-build
                 '''
             }
