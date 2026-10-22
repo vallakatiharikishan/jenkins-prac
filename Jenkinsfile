@@ -53,12 +53,21 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat '''
-                    docker run --rm ^
-                      --mount "type=bind,source=%WORKSPACE%,target=/app" ^
-                      -w /app node:22 ^
-                      npm run build
-                '''
+            bat '''
+                if exist dist (
+                    rmdir /S /Q dist
+                )
+
+                if exist dist (
+                    echo ERROR: Could not remove old dist directory
+                    exit /b 1
+                )
+
+                docker run --rm ^
+                --mount "type=bind,source=%WORKSPACE%,target=/app" ^
+                -w /app node:22 ^
+                npm run build
+            '''
             }
         }
 
