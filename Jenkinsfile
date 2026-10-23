@@ -84,6 +84,19 @@ pipeline {
             }
         }
 
+        stage('Deploy Staging to Netlify') {
+            steps {
+                bat '''
+                    docker run --rm ^
+                      --mount "type=bind,source=%WORKSPACE%,target=/app" ^
+                      -e NETLIFY_SITE_ID ^
+                      -e NETLIFY_AUTH_TOKEN ^
+                      -w /app node:22 ^
+                      npx --yes netlify-cli deploy --dir=dist --site=%NETLIFY_SITE_ID% --no-build
+                '''
+                echo "Staging deployment to Netlify completed successfully"
+            }
+        } 
         stage('Deploy to Netlify') {
             steps {
                 bat '''
@@ -94,6 +107,7 @@ pipeline {
                       -w /app node:22 ^
                       npx --yes netlify-cli deploy --dir=dist --prod --site=%NETLIFY_SITE_ID% --no-build
                 '''
+                echo "Production deployment to Netlify completed successfully"
             }
         }
 
