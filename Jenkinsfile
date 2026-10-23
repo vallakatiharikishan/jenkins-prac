@@ -1,3 +1,22 @@
+pipeline {
+    agent any
+
+    environment {
+        CI = 'true'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Deploy to Netlify') {
+            steps {
+                echo 'Deploy your application here'
+            }
+        }
 
         stage('Playwright Tests') {
             environment {
@@ -14,11 +33,15 @@
                       npx playwright test
                 '''
             }
-
-            post {
-                always {
-                    archiveArtifacts artifacts: 'playwright-report/**, test-results/**',
-                                     allowEmptyArchive: true
-                }
-            }
         }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed. Check the logs.'
+        }
+    }
+}
