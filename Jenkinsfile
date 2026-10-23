@@ -13,7 +13,7 @@ pipeline {
         timeout(time: 20, unit: 'MINUTES')
     }
 
-    stages 
+    stages {
         stage('Checkout') {
             steps {
                 checkout scm
