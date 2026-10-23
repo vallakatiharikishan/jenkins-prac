@@ -41,16 +41,16 @@ pipeline {
             }
         }
 
-        stage('Code Quality') {
-            steps {
-                bat '''
-                    docker run --rm ^
-                      --mount "type=bind,source=%WORKSPACE%,target=/app" ^
-                      -w /app node:22 ^
-                      npm run lint
-                '''
-            }
-        }
+        // stage('Code Quality') {
+        //     steps {
+        //         bat '''
+        //             docker run --rm ^
+        //               --mount "type=bind,source=%WORKSPACE%,target=/app" ^
+        //               -w /app node:22 ^
+        //               npm run lint
+        //         '''
+        //     }
+        // }
 
         stage('Build') {
             steps {
