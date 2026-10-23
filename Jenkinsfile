@@ -100,7 +100,7 @@ pipeline {
     }
 
 
-            stage('Playwright Tests') {
+        stage('Playwright Tests') {
 
                 environment {
                     BASE_URL = 'https://boisterous-bombolone-1d9827.netlify.app/'
