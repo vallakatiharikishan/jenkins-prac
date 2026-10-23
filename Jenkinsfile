@@ -97,7 +97,6 @@ pipeline {
                 '''
             }
         }
-    }
 
 
         stage('Playwright Tests') {
@@ -117,12 +116,7 @@ pipeline {
                     '''
                 }
 
-                
-                
-            }
-        
-            
-        
+    }
 
     post {
         success {
@@ -138,4 +132,4 @@ pipeline {
             echo 'Jenkins pipeline execution finished..'
         }
     }
-}
+}}
