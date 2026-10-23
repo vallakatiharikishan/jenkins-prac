@@ -13,7 +13,7 @@ pipeline {
         timeout(time: 20, unit: 'MINUTES')
     }
 
-    stages {
+    stages 
         stage('Checkout') {
             steps {
                 checkout scm
@@ -118,14 +118,11 @@ pipeline {
                 }
 
                 
-                post {
-                    always {
-                        archiveArtifacts artifacts: 'playwright-report/**, test-results/**',
-                                        allowEmptyArchive: true
-                    }
-                }
+                
             }
-
+        
+            
+        
 
     post {
         success {
@@ -141,4 +138,3 @@ pipeline {
             echo 'Jenkins pipeline execution finished..'
         }
     }
-}
