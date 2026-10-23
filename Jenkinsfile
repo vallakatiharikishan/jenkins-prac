@@ -106,11 +106,11 @@ pipeline {
         }
 
         failure {
-            echo 'Pipeline failed. Check the stage logs.'
+            echo 'Pipeline failed. Check the stage logs..'
         }
 
         always {
-            echo 'Jenkins pipeline execution finished.'
+            echo 'Jenkins pipeline execution finished..'
         }
     }
 }
