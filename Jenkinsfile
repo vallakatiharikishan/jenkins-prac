@@ -138,3 +138,4 @@ pipeline {
             echo 'Jenkins pipeline execution finished..'
         }
     }
+}
