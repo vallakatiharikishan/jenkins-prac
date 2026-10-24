@@ -99,8 +99,10 @@ pipeline {
         } 
         stage('Approval'){
             steps{
-             
+               timeout(3) {
+                // some block
                 input message: 'Do you wish to deploy to production?', ok: 'Yes, I am sure!'
+                 }
                 
             }
         }
